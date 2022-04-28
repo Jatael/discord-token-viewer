@@ -1,0 +1,24 @@
+{
+  "name": "discord-token-viewer",
+  "version": "1.0.0",
+  "description": "A discord bot for following JPEG value",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Jatael/discord-token-viewer.git"
+  },
+  "author": "Jataël",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Jatael/discord-token-viewer/issues"
+  },
+  "homepage": "https://github.com/Jatael/discord-token-viewer#readme",
+  "dependencies": {
+    "@discordjs/builders": "^0.13.0",
+    "@discordjs/rest": "^0.4.1",
+    "discord-api-types": "^0.32.0",
+    "discord.js": "^13.6.0",
+    "keyv": "^4.2.2",
+    "node-fetch": "^2.6.7"
+  }
+}
