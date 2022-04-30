@@ -2,5 +2,7 @@
   "clientId": "968919841027284992",
   "guildId": "968920756559941642",
   "token": "DISCORD-SECRET",
-  "apiKeyCMC": "COINMARKETCAP-API-KEY"
+  "apiKeyCMC": "COINMARKETCAP-API-KEY",
+  "urlCMC": "https://pro-api.coinmarketcap.com/v2/tools/price-conversion?amount=1&id=14717&convert=USD",
+  "database": "mysql://jpeguser:password@localhost:3306/jpegbot"
 }
