@@ -24,11 +24,13 @@ client.on('interactionCreate', async interaction => {
     const { commandName } = interaction;
 
     if (commandName === 'init') {
-        storage.get(keyStorageChannelId)
+        storage.get(keyStorageChannelId + interaction.guild.id)
             .then((channelId) => {
+                console.log('Find channelId: ' + channelId + ' for guild '+ interaction.guild.id);
                 if (channelId) {
                     interaction.guild.channels.fetch(channelId)
                         .then(channel => channel.delete())
+                        .then(() => console.log('Channel deleted on guild '+ interaction.guild.id))
                 }
             })
             .then(() => interaction.guild.channels.create('JPEG:', {
@@ -40,8 +42,8 @@ client.on('interactionCreate', async interaction => {
                     allow: ['CONNECT'],
                 }]
             }))
-            .then(e => storage.set(keyStorageChannelId, e.id))
-            .then(updateInterval)
+            .then(e => storage.set(keyStorageChannelId+interaction.guild.id, e.id))
+            .then(e => addGuildToActive(interaction.guild.id))
             .then(interaction.reply('Success!'))
             .catch(console.error);
     }
@@ -50,10 +52,21 @@ client.on('interactionCreate', async interaction => {
 client.login(token);
 
 function updateInterval() {
-    return storage.get(keyStorageChannelId).then(channelId => {
-        if (channelId === undefined) throw null
-        return getNewValue(channelId);
-    })
+    return storage.get("activeGuilds")
+        .then(e => {
+            console.log("EEE", e)
+            return e;
+        })
+        .then(activeGuilds => {
+            console.log(activeGuilds);
+            for (let i = 0; i < activeGuilds.length; i++) {
+                storage.get(keyStorageChannelId+activeGuilds[i])
+                    .then(channelId => {
+                        if (channelId === undefined) throw null
+                        return getNewValue(channelId);
+                    })
+            }
+        });
 }
 
 function getNewValue(channelId) {
@@ -72,3 +85,20 @@ function getNewValue(channelId) {
         .catch(console.error)
 }
 
+function addGuildToActive(guildId) {
+    return storage.get("activeGuilds")
+        .then(data => {
+            if (!data) return [];
+            console.log("data", data);
+            return data;
+        })
+        .then(activeGuilds => {
+            console.log("Current guild values", activeGuilds);
+            let guilds = activeGuilds.filter(item => item !== guildId);
+            console.log("Current guild values after filtering", guilds);
+            guilds.push(guildId);
+            console.log("Current guild values after pushing", guilds);
+            storage.set("activeGuilds", guilds).then(updateInterval)
+        })
+        .catch(console.error)
+}
