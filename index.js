@@ -26,11 +26,9 @@ client.on('interactionCreate', async interaction => {
     if (commandName === 'init') {
         storage.get(keyStorageChannelId + interaction.guild.id)
             .then((channelId) => {
-                console.log('Find channelId: ' + channelId + ' for guild '+ interaction.guild.id);
                 if (channelId) {
                     interaction.guild.channels.fetch(channelId)
                         .then(channel => channel.delete())
-                        .then(() => console.log('Channel deleted on guild '+ interaction.guild.id))
                 }
             })
             .then(() => interaction.guild.channels.create('JPEG:', {
@@ -54,11 +52,9 @@ client.login(token);
 function updateInterval() {
     return storage.get("activeGuilds")
         .then(e => {
-            console.log("EEE", e)
             return e;
         })
         .then(activeGuilds => {
-            console.log(activeGuilds);
             for (let i = 0; i < activeGuilds.length; i++) {
                 storage.get(keyStorageChannelId+activeGuilds[i])
                     .then(channelId => {
@@ -89,15 +85,11 @@ function addGuildToActive(guildId) {
     return storage.get("activeGuilds")
         .then(data => {
             if (!data) return [];
-            console.log("data", data);
             return data;
         })
         .then(activeGuilds => {
-            console.log("Current guild values", activeGuilds);
             let guilds = activeGuilds.filter(item => item !== guildId);
-            console.log("Current guild values after filtering", guilds);
             guilds.push(guildId);
-            console.log("Current guild values after pushing", guilds);
             storage.set("activeGuilds", guilds).then(updateInterval)
         })
         .catch(console.error)
