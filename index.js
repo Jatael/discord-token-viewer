@@ -77,7 +77,7 @@ function getNewValue(channelId) {
             JPEGValue = JPEGValue.toFixed(decimalToShow);
             return client.channels.fetch(channelId);
         })
-        .then(channel => channel.setName(` | Price: ${JPEGValue}`))
+        .then(channel => channel.setName(` | Price: ${JPEGValue}$`))
         .catch(console.error)
 }
 
