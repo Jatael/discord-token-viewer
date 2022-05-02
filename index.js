@@ -8,7 +8,9 @@ storage.on('error', err => console.error('KeyV connection error:', err));
 const decimalToShow = 5;
 const checkMinutes = 15;
 const checkInterval = checkMinutes * 60 * 1000;
+const supply = 565000000;
 const keyStorageChannelId = 'channelId';
+const keyStorageChannelMCId = 'channelMCId';
 
 let JPEGValue = -1;
 
@@ -41,6 +43,16 @@ client.on('interactionCreate', async interaction => {
                 }]
             }))
             .then(e => storage.set(keyStorageChannelId+interaction.guild.id, e.id))
+            .then(() => interaction.guild.channels.create(' | MC : initializing', {
+                reason: 'vocal', type: 2, permissionOverwrites: [{
+                    id: interaction.guild.roles.everyone,
+                    deny: ['CONNECT'],
+                }, {
+                    id: client.user.id,
+                    allow: ['CONNECT'],
+                }]
+            }))
+            .then(e => storage.set(keyStorageChannelMCId+interaction.guild.id, e.id))
             .then(e => addGuildToActive(interaction.guild.id))
             .then(interaction.reply('Success!'))
             .catch(console.error);
@@ -60,7 +72,17 @@ function updateInterval() {
                     .then(channelId => {
                         if (channelId === undefined) throw null
                         return getNewValue(channelId);
-                    })
+                    }).then(e => {
+                        storage.get(keyStorageChannelMCId+activeGuilds[i])
+                            .then(channelId => {
+                                if (channelId === undefined) throw null
+                                return client.channels.fetch(channelId);
+                            })
+                            .then(channel => {
+                                let marketCap = JPEGValue * supply;
+                                return channel.setName(`｜MC: ${marketCap}$`);
+                            })
+                })
             }
         });
 }
