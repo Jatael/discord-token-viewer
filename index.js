@@ -32,6 +32,13 @@ client.on('interactionCreate', async interaction => {
                     interaction.guild.channels.fetch(channelId)
                         .then(channel => channel.delete())
                 }
+            }).then(() => {
+                return storage.get(keyStorageChannelMCId + interaction.guild.id)
+            }).then(channelMCId => {
+                if (channelMCId) {
+                    interaction.guild.channels.fetch(channelMCId)
+                        .then(channel => channel.delete())
+                }
             })
             .then(() => interaction.guild.channels.create(' | Price : initializing', {
                 reason: 'vocal', type: 2, permissionOverwrites: [{
