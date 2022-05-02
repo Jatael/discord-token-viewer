@@ -31,7 +31,7 @@ client.on('interactionCreate', async interaction => {
                         .then(channel => channel.delete())
                 }
             })
-            .then(() => interaction.guild.channels.create('JPEG:', {
+            .then(() => interaction.guild.channels.create(' | Price : initializing', {
                 reason: 'vocal', type: 2, permissionOverwrites: [{
                     id: interaction.guild.roles.everyone,
                     deny: ['CONNECT'],
@@ -77,7 +77,7 @@ function getNewValue(channelId) {
             JPEGValue = JPEGValue.toFixed(decimalToShow);
             return client.channels.fetch(channelId);
         })
-        .then(channel => channel.setName(`Value: ${JPEGValue}`))
+        .then(channel => channel.setName(`| Price: ${JPEGValue}`))
         .catch(console.error)
 }
 
