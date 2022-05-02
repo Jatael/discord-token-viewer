@@ -6,6 +6,7 @@ const storage = new keyV(database);
 storage.on('error', err => console.error('KeyV connection error:', err));
 
 const decimalToShow = 5;
+const decimalToShowMC = 2;
 const checkMinutes = 15;
 const checkInterval = checkMinutes * 60 * 1000;
 const supply = 565000000;
@@ -50,7 +51,7 @@ client.on('interactionCreate', async interaction => {
                 }]
             }))
             .then(e => storage.set(keyStorageChannelId+interaction.guild.id, e.id))
-            .then(() => interaction.guild.channels.create(' | MC : initializing', {
+            .then(() => interaction.guild.channels.create(' | MarketCap : initializing', {
                 reason: 'vocal', type: 2, permissionOverwrites: [{
                     id: interaction.guild.roles.everyone,
                     deny: ['CONNECT'],
@@ -87,8 +88,8 @@ function updateInterval() {
                             })
                             .then(channel => {
                                 let marketCap = JPEGValue * supply;
-                                marketCap = marketCapFormatter(marketCap, 1);
-                                return channel.setName(`｜MC: ${marketCap}$`);
+                                marketCap = marketCapFormatter(marketCap, decimalToShowMC);
+                                return channel.setName(`｜MarketCap: ${marketCap}$`);
                             })
                 })
             }
